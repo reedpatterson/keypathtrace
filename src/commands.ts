@@ -13,14 +13,17 @@ export async function NavigateCommand(context: vscode.ExtensionContext) {
     if (!editor) return;
     const doc = editor.document;
     const sel = editor.selection;
-    const range = doc.getWordRangeAtPosition(sel.active, /[A-Za-z0-9_.]+/);
+    const range = doc.getWordRangeAtPosition(sel.active, /[A-Za-z0-9_.\-]+/);
     if (!range) return;
     const word = doc.getText(range);
+    // allow tokens that are prefixes with trailing dots (e.g. "entity.general.time.")
+    // normalize by stripping trailing dots so the lookup will search for `entity.general.time`
+    const path = word.replace(/\.+$/, '');
 
     // try workspace-wide search under configured glob and open ALL matches (subject to maxOpenResults)
     try {
         const nav = await import('./jsonNavigator');
-        const all = await nav.findAllPathsInWorkspace(word);
+        const all = await nav.findAllPathsInWorkspace(path);
         if (all && all.length > 0) {
             const config = vscode.workspace.getConfiguration('keypath');
             const max = (config && typeof config.get === 'function') ? (config.get<number>('maxOpenResults') ?? 10) : 10;
@@ -48,7 +51,7 @@ export async function NavigateCommand(context: vscode.ExtensionContext) {
         if (selected) {
             const targetDoc = await vscode.workspace.openTextDocument(vscode.Uri.file(selected));
             const text = targetDoc.getText();
-            const off = nav.findOffsetForPath(text, word);
+            const off = nav.findOffsetForPath(text, path);
             if (off) {
                 const start = targetDoc.positionAt(off.start);
                 const end = targetDoc.positionAt(off.end);
@@ -59,7 +62,7 @@ export async function NavigateCommand(context: vscode.ExtensionContext) {
             }
         }
 
-        vscode.window.showInformationMessage(`Path not found in workspace: ${word}`);
+        vscode.window.showInformationMessage(`Path not found in workspace: ${path}`);
     } catch (e) {
         vscode.window.showErrorMessage(String(e));
     }

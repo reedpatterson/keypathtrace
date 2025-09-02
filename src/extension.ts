@@ -38,7 +38,7 @@ class KeypathTerminalLinkProvider {
 
     provideTerminalLinks(contextArg: any, token: any): any {
         const line = contextArg.line as string;
-        const regex = /['"`]?[_A-Za-z0-9$\[\]\.]+['"`]?/g;
+        const regex = /['"`]?[_A-Za-z0-9$\[\]\.\-]+['"`]?/g;
         const links: any[] = [];
         let m: RegExpExecArray | null;
         while ((m = regex.exec(line)) !== null) {
