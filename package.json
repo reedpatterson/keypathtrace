@@ -1,7 +1,11 @@
 {
   "name": "keypath-navigator",
   "displayName": "Keypath Navigator",
-  "publisher": "your-publisher",
+  "publisher": "reedpatterson",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/reedpatterson/keypathtrace"
+  },
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.50.0"
