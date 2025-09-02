@@ -8,7 +8,6 @@ This repository contains the extension source in `src/` and the activation/debug
 
 - Search workspace JSON files for a dot-separated key path and open all matching files. Matches are opened with preview disabled (tabs are persistent).
 - Trigger navigation from the editor at the cursor via a command or a single-click status bar button.
-- Clickable dot-path tokens in the integrated terminal (terminal link provider) are supported.
 - Handles quoted and unquoted dot-path tokens. Complex array indexing and escaped/quoted-key edge cases are lower-priority and may be improved later.
 
 ## Quick usage
@@ -28,11 +27,7 @@ Example paths:
 
 Use the Command Palette (Ctrl+Shift+P / Cmd+Shift+P) to run these commands.
 
-## Terminal integration
-
-The extension registers a terminal link provider. When the integrated terminal prints dot-path tokens, they become clickable links. Clicking a terminal link runs the same workspace search and opens all matching JSON files (or falls back to selection).
-
-Note: If you prefer not to use terminal links, copy the path into an editor and use the status bar button or the `Keypath: Navigate` command.
+Note: Terminal link integration has been removed. Use the status bar button or the `Keypath: Navigate` command from an editor to trigger navigation.
 
 ## Default behavior and implementation notes
 
@@ -75,10 +70,11 @@ To change settings, open Settings (Ctrl+,) and search for "Keypath" or add entri
 
 Project structure (important files):
 
-- `src/extension.ts` — activation, status bar button, and terminal link provider registration.
+- `src/extension.ts` — activation and status bar button registration (terminal integration removed).
 - `src/commands.ts` — `NavigateCommand` and `SelectJsonCommand` implementations.
 - `src/jsonNavigator.ts` — workspace scanning and path-to-offset helpers.
-- `package.json` — extension metadata, activation events, contributed commands.
+- `src/jsonOffset.ts` — pure utility used to compute textual offsets for a key path (unit-testable).
+- `package.json` — extension metadata, activation events, contributed commands and configuration.
 - `tsconfig.json` and `.vscode/launch.json` — compiler and debug configuration.
 
 To run and debug locally:
