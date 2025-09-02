@@ -1,0 +1,61 @@
+{
+  "name": "keypath-navigator",
+  "displayName": "Keypath Navigator",
+  "publisher": "your-publisher",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.50.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onCommand:keypath.selectJson",
+    "onCommand:keypath.navigate"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "keypath.selectJson",
+        "title": "Keypath: Select JSON File"
+      },
+      {
+        "command": "keypath.navigate",
+        "title": "Keypath: Navigate to Path"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Keypath Navigator",
+      "properties": {
+        "keypath.fileGlob": {
+          "type": "string",
+          "default": "src/**/*.json",
+          "description": "Glob pattern used to find JSON files in the workspace to search for key paths."
+        },
+        "keypath.maxOpenResults": {
+          "type": "number",
+          "default": 10,
+          "description": "Maximum number of matching files to open when navigating a key path. Set to 0 for no limit."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -w -p ./",
+    "test": "mocha -r ts-node/register test/**/*.spec.ts --timeout 2000"
+  },
+  "devDependencies": {
+    "@types/chai": "^5.2.2",
+    "@types/mocha": "^10.0.10",
+    "chai": "^4.0.0",
+    "mocha": "^10.0.0",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.0.0",
+    "vscode": "^1.1.37"
+  }
+}
